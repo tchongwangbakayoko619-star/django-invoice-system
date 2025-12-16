@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block content %}
+<br><br>
+<h1 class="text-capitalize text-center mx-10 bg-dark text-white">{% trans "Register a new invoice" %}</h1>
+<form method="POST">
+    {% csrf_token %}
+    <div class="form-row">
+        <div class="form-group col-md-12">
+            <label for="customer">{% trans "Customer" %}</label>
+            <select name="customer" required class="form-control" id="customer" style="color: black;">
+                <option value="">{% trans "Select a customer" %}</option>
+                {% for customer in customers %}
+                <option value="{{ customer.pk }}" style="color: black;">{{ customer.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-12">
+            <label for="invoice">{% trans "The type of invoice" %}</label>
+            <select name="invoice_type" required class="form-control" id="invoice">
+                <option value="">{% trans "Select the type of invoice" %}</option>
+                <option value="R">{% trans "RECEIPT" %}</option>
+                <option value="P">{% trans "PROFORMA INVOICE" %}</option>
+                <option value="F">{% trans "INVOICE" %}</option>
+            </select>
+        </div>
+    </div>
+
+    <div id="wrapper">
+        <div class="form-row">
+            <div class="form-group col-md-3">
+                <label for="artice-1"># {% trans "Item name" %}</label>
+                <input type="text" required class="form-control" name="articles" id="item_name" placeholder="{% trans 'Item name' %}">
+            </div>
+            <div class="form-group col-md-3">
+                <label for="quantity-1">{% trans "Quantity" %}</label>
+                <input type="number" required class="form-control" onchange="handleChangeSingleArticle(this.id)" min="1" step="0.1" name="quantity" id="quantity-1" placeholder="{% trans 'Quantity' %}">
+            </div>
+            <div class="form-group col-md-3">
+                <label for="price-1">{% trans "Price" %}</label>
+                <input type="number" required class="form-control" onchange="handleChangeSingleArticle(this.id)" min="1" step="0.1" name="price" id="price-1" placeholder="{% trans 'Price' %}">
+            </div>
+            <div class="form-group col-md-3">
+                <label for="total-1">{% trans "Total" %}</label>
+                <input type="number" required class="form-control" min="1" step="0.1" name="total" id="total-1" placeholder="{% trans 'Total' %}">
+            </div>
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-12">
+            <label for="total">{% trans "Grand Total" %}</label>
+            <input type="number" value="0" required class="form-control" name="grand_total" id="total" placeholder="{% trans 'Total' %}" readonly>
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-12">
+            <label for="price-1">{% trans "Comment" %}</label>
+            <textarea class="form-control" name="comment" cols="30" rows="10" id="comment" placeholder="{% trans 'Comment' %}"></textarea>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="form-check">
+            <label class="form-check-label" for="paid">{% trans "Paid" %}</label>
+            <input type="checkbox" class="form-control" name="paid" class="form-check-input" id="paid" value="True" checked>
+        </div>
+    </div>
+    <br><br>
+
+    <button type="submit" class="btn btn-primary text-center">{% trans "Save" %}</button>
+    <br><br>
+</form>
+
+<div class="row">
+    <button id="btn-add" class="btn btn-outline-warning w-50 col-md-6">{% trans "Add a new item line" %}</button>
+    <button id="btn-remove" class="btn btn-outline-danger w-50 col-md-6">{% trans "Remove last item line" %}</button>
+</div>
+<br><br><br><br>
+
+<script type="text/javascript">
+    $(document).on('click', '#btn-add', function () {
+        var number = $('#wrapper').children().length + 1;
+        let formAdd = `<div class="form-row">
+                        <div class="form-group col-md-3">
+                            <label for="artice-${number}">#${number} {% trans "Item name" %}</label>
+                            <input type="text" required class="form-control" name="item_name" id="item_name" placeholder="{% trans 'Item name' %}">
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="quantity-${number}">{% trans "Quantity" %}</label>
+                            <input type="number" required class="form-control" onchange="handleChangeSingleArticle(this.id)" min="1" step="0.1" name="quantity" id="quantity-${number}" placeholder="{% trans 'Quantity' %}">
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="price-${number}">{% trans "Price" %}</label>
+                            <input type="number" required class="form-control" min="1" step="0.1" name="price" onchange="handleChangeSingleArticle(this.id)" id="price-${number}" placeholder="{% trans 'Price' %}">
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="total-${number}">{% trans "Total" %}</label>
+                            <input type="number" required class="form-control" min="1" step="0.1" name="total" id="total-${number}" placeholder="{% trans 'Total' %}">
+                        </div>
+                      </div>`;
+        $('#wrapper:last').append(formAdd);
+    });
+
+    $(document).on('click', '#btn-remove', function () {
+        if ($('#wrapper').children().last().remove()) {
+            updateGrandTotal();
+            alert('{% trans "The last item line has been removed" %}');
+        } else {
+            alert('{% trans "There is no item line to remove" %}');
+        }
+    });
+
+    function updateGrandTotal() {
+        let grandTotal = 0;
+
+        // Parcourir tous les champs "total" des lignes d'articles
+        document.querySelectorAll('[id^="total-"]').forEach(function (totalField) {
+            let totalValue = parseFloat(totalField.value) || 0; // Si vide, utiliser 0
+            grandTotal += totalValue; // Ajouter au grand total
+        });
+
+        // Mettre à jour le champ "grand-total"
+        document.getElementById('total').value = grandTotal.toFixed(2); // Arrondir à 2 décimales
+    }
+
+    function handleChangeSingleArticle(id) {
+        // Récupérer l'ID de l'élément modifié (par exemple, "quantity-1" ou "price-1")
+        let articleId = id.split('-')[1]; // Récupère le numéro de l'article (par exemple, "1")
+        // Récupérer les champs correspondants pour la quantité, le prix et le total
+        let quantityField = document.getElementById(`quantity-${articleId}`);
+        let priceField = document.getElementById(`price-${articleId}`);
+        let totalField = document.getElementById(`total-${articleId}`);
+
+        // Vérifier si les champs quantité et prix ont des valeurs
+        let quantity = parseFloat(quantityField.value) || 0; // Si vide, utiliser 0
+        let price = parseFloat(priceField.value) || 0; // Si vide, utiliser 0
+
+        // Calculer le total
+        let total = quantity * price;
+
+        // Mettre à jour le champ total
+        totalField.value = total.toFixed(2); // Arrondir à 2 décimales
+        updateGrandTotal();
+    }
+</script>
+{% endblock content %}

@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% load i18n %} <!-- Charge le module de traduction -->
+{% block content %}
+<br><br>
+<h1 class="text-capitatlizer text-center  mx-10 bg-dark text-white">Register a new customer</h1>
+<form method="POST" class="mx-5">
+    {% csrf_token %}
+    <div class="form-row">
+        <div class="form-group col-md-6" >
+            <label for="name">Name</label>
+            <input type="text" required class="form-control" name="name" id="name" placeholder="customer first name and last name"> 
+        </div>
+        <div class="form-group col-md-6" >
+            <label for="email">Email</label>
+            <input type="email" required class="form-control" name="email" id="email" placeholder="customer email"> 
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-6" >
+            <label for="phone">Phone</label>
+            <input type="number" class="form-control" name="phone" id="phone" placeholder="customer phone number">
+     </div>
+    <div class="form-group col-md-6" >
+        <label for="state">State</label>
+        <select name="state" required id="state" class="form-control">
+            <option value="Cameroon">Cameroon</option>
+            <option value="England">England</option>
+            <option value="Gemarny">Gemarny</option>
+            <option value="France">France</option>
+            <option value="USA">USA</option>
+            <option value="Portugal">Portugal</option>
+        </select>
+    </div>
+   
+</div>
+<div class="form-row">
+    
+    <div class="form-group col-md-6" >
+        <label for="address">Adress</label> 
+        <input type="text" required class="form-control" name="address" id="address" placeholder="customer adress">
+    </div>
+    <div class="form-group col-md-6" >
+        <label for="sex">Sex</label> 
+        <select required name="sex"  id="sex" class="form-control">
+            <option value="M">Male</option>
+            <option value="F">Femele</option>
+        </select>
+    </div>
+</div>    
+<div class="form-row">
+    <div class="form-group col-md-6" >
+        <label for="city">City</label> 
+        <input type="text" required class="form-control" name="city" id="city" placeholder="customer city">
+    </div>
+    <div class="form-group col-md-6" >
+        <label for="Zip">Zip code</label> 
+        <input type="text" required class="form-control" name="Zip" id="Zip" placeholder="customer Zip code">
+    </div>    
+</div>
+   <button type="submit" class="btn btn-primary text-center">Save</button> 
+</form>
+<br><br>
+{% endblock content %} 

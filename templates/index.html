@@ -1,0 +1,207 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %} <!-- Charge le module de traduction -->
+{% block content %}
+<br><br>
+
+<!-- Section des boutons pour ajouter une facture ou un client -->
+<div class="row">
+   <!-- Bouton pour ajouter une nouvelle facture -->
+   <a href="{% url 'add_invoice' %}" class="btn col-md-4 btn-primary">
+      {% trans 'Register a new invoice' %}<span class="badge text-bg-secondary"></span>
+   </a>
+
+   <!-- Bouton vide (peut être utilisé pour une autre action) -->
+   <a href='#' class="col-md-4">
+      <span class="badge text-bg-secondary"></span>
+   </a>
+
+   <!-- Bouton pour ajouter un nouveau client -->
+   <a href="{% url 'add_customer' %}" class="btn col-md-4 btn-primary">
+      {% trans 'Register a new customer' %}<span class="badge text-bg-secondary"></span>
+   </a>
+</div>
+
+<br> <br>
+
+<!-- Champ de recherche -->
+<div class="form-group ">
+   <!-- Champ de saisie pour rechercher dans le tableau -->
+   <input id="search" class="form-control" type="text" placeholder="{% trans 'Search...' %}">
+</div>
+
+<!-- Tableau des factures -->
+<div>
+   <table class="table table-striped-columns">
+      <thead>
+         <tr>
+            <!-- En-têtes des colonnes du tableau -->
+            <th scope="col">#</th>
+            <th scope="col">{% trans 'CUSTOMERS NAME' %}</th>
+            <th scope="col">{% trans 'DATE' %}</th>
+            <th scope="col">{% trans 'TOTAL' %}</th>
+            <th scope="col">{% trans 'PAID' %}</th>
+            <th scope="col">{% trans 'TYPE OF INVOICE' %}</th>
+            <th scope="col">{% trans 'ACTION' %}</th>
+         </tr>
+      </thead>
+      <tbody id="myTable">
+         {% if invoices %}
+         <!-- Boucle pour afficher chaque facture -->
+         {% for facture in invoices %}
+         <tr>
+            <th scope="row">{{ facture.pk }}</th>
+            <td>{{facture.Costumer.name}}</td>
+            <td>{{facture.invoice_date_time}}</td>
+            <td>{{ facture.total}}</td>
+            <td>
+               <!-- Affiche une icône selon que la facture est payée ou non -->
+               {% if facture.paid %}
+               <img src="{% static 'images/icon-yes.svg' %}" alt="{% trans 'True' %}">
+               {% else %}
+               <img src="{% static 'images/icon-no.svg' %}" alt="{% trans 'False' %}">
+               {% endif %}
+            </td>
+            <td>{{facture.get_invoice_type_display }}</td>
+            <td>
+               <!-- Bouton pour afficher les détails de la facture -->
+               <a href="{% url 'InvoiceDetailView' pk=facture.pk %}" title="{% trans 'Detail' %}" class="badge text-white bg-success">{% trans 'View' %}</a>
+
+               <!-- Bouton pour ouvrir le modal de suppression -->
+               <button id="btn-invoice-sup" type="button" data-toggle="modal" data-target="#supprimer"
+                  class="badge text-white bg-danger" title="{% trans 'Delete' %}" data-id="{{ facture.pk }}"
+                  data-customer="{{facture.customer.name}}">{% trans 'Delete' %} 
+               </button>
+
+               <!-- Bouton pour ouvrir le modal de modification -->
+               <button id="btn-invoice-mod" type="button" data-toggle="modal" title="{% trans 'Modify' %}" data-target="#modifier"
+                  data-id="{{facture.pk}}" data-customer="{{facture.customer.name}}"
+                  class="badge text-dark bg-warning">{% trans 'Modify' %}
+               </button>
+            </td>
+         </tr>
+         {% endfor %}
+
+         <!-- Pagination -->
+         {% if invoices.has_other_pages %}
+         <div class="btn-group" role="group" aria-label="{% trans 'Item pagination' %}">
+            <!-- Bouton pour aller à la page précédente -->
+            {% if invoices.has_previous %}
+            <a href="?page={{ invoices.previous_page_number }}" class="btn btn-outline-primary">&laquo;</a>
+            {% endif %}
+            <!-- Boucle pour afficher les numéros de page -->
+            {% for i in invoices.paginator.page_range %}
+               {% if invoices.number == i %}
+               <a href="?page={{ i }}" class="btn btn-primary">{{ i }}</a>
+               {% else %}
+               <a href="?page={{ i }}" class="btn btn-outline-primary">{{ i }}</a>
+               {% endif %}
+            {% endfor %}
+            <!-- Bouton pour aller à la page suivante -->
+            {% if invoices.has_next %}
+            <a href="?page={{ invoices.next_page_number }}" class="btn btn-outline-primary">&raquo;</a>
+            {% endif %}
+         </div>
+         {% endif %}
+         {% else %}
+         <!-- Message si aucune facture n'est trouvée -->
+         <p class="text-center text-white">{% trans 'No invoice found.' %}</p>
+         {% endif %}
+      </tbody>
+   </table>
+</div>
+
+<!-- Modal pour modifier une facture -->
+<div class="modal fade" id="modifier" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+   aria-hidden="true">
+   <div class="modal-dialog" role="document">
+      <div class="modal-content">
+         <div class="modal-header">
+            <h5 class="modal-title text-dark text-center" id="exampleModalLabel">{% trans 'Modification' %}</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="{% trans 'Close' %}">
+               <span aria-hidden="true">&times;</span>
+            </button>
+         </div>
+         <form method="post">
+            {% csrf_token %}
+            <div class="modal-body">
+               <!-- Champ caché pour stocker l'ID de la facture à modifier -->
+               <input name="id_modified" type="hidden" id="id_modified">
+               <label id="label_id" class="text-dark checkbox-inline"> <strong id="strong_id">{% trans 'This bill has been paid?' %}</strong></label>
+               <!-- Options pour indiquer si la facture est payée ou non -->
+               <input type="radio" id="html" name="modified" value="True">
+               <label class="text-white bg-primary" for="html">{% trans 'Yes' %}</label>
+               <input type="radio" id="css" name="modified" value="False">
+               <label class="text-white bg-danger" for="css">{% trans 'No' %}</label><br>
+            </div>
+            <div class="modal-footer">
+               <button type="button" class="btn btn-secondary" data-dismiss="modal">{% trans 'Close' %}</button>
+               <button type="submit" class="btn btn-primary">{% trans 'Save' %}</button>
+            </div>
+         </form>
+      </div>
+   </div>
+</div>
+
+<!-- Modal pour supprimer une facture -->
+<div class="modal fade" id="supprimer" tabindex="-1" role="dialog" aria-labelledby="sexampleModalLabel"
+   aria-hidden="true">
+   <div class="modal-dialog" role="document">
+      <div class="modal-content">
+         <div class="modal-header">
+            <h5 class="modal-title text-dark" id="sexampleModalLabel">{% trans 'Delete Invoice' %}</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="{% trans 'Close' %}">
+               <span aria-hidden="true">&times;</span>
+            </button>
+         </div>
+         <div class="modal-body">
+            <form method="post">
+               {% csrf_token %}
+               <!-- Champ caché pour stocker l'ID de la facture à supprimer -->
+               <input name="id_supprimer" type="hidden" id="id_supprimer">
+               <label id="label_id_s" class="text-dark checkbox-inline"> <strong id="strong_id_s">{% trans 'Are you sure you want to delete the invoice?' %}</strong></label>
+               <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">{% trans 'Close' %}</button>
+                  <button type="submit" class="btn btn-danger">{% trans 'Delete' %}</button>
+               </div>
+            </form>
+         </div>
+      </div>
+   </div>
+</div>
+
+<br><br>
+<script>
+   $(document).ready(function () {
+      // Fonction pour filtrer les lignes du tableau en fonction de la recherche
+      $("#search").on("keyup", function () {
+         var value = $(this).val().toLowerCase(); // Récupère la valeur saisie et la convertit en minuscule
+         $("#myTable tr").filter(function () {
+            // Affiche ou masque les lignes en fonction de la correspondance
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+         });
+      });
+   });
+   
+   // modification
+
+   $(document).on('click', '#btn-invoice-mod', function(){
+      let invoice_id = $(this).data('id');
+      let customer = $(this).data('customer');
+      $('#id_modified').val(invoice_id);
+
+   })
+
+   // deleting of invoice
+
+   $(document).on('click', '#btn-invoice-sup', function(){
+      let invoice_id = $(this).data('id');
+      let customer = $(this).data('customer');
+      $('#id_supprimer').val(invoice_id);
+
+   })
+
+
+
+</script>
+{% endblock %}

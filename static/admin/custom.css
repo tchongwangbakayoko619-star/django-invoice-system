@@ -1,0 +1,17 @@
+/* Change la couleur de l'en-tête */
+#header {
+    background-color: #4CAF50;
+    color: white;
+}
+
+/* Change la couleur des boutons */
+button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+}
+
+/* Change la couleur des liens */
+a {
+    color: #4CAF50;
+}

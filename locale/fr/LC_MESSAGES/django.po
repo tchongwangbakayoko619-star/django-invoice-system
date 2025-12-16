@@ -1,0 +1,248 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-04-04 08:52+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+#: .\django_invwoice\settings.py:130 .\templates\base.html:28
+msgid "English"
+msgstr ""
+
+#: .\django_invwoice\settings.py:131 .\templates\base.html:29
+msgid "French"
+msgstr ""
+
+#: .\templates\add_invoice.html:5 .\templates\index.html:11
+msgid "Register a new invoice"
+msgstr ""
+
+#: .\templates\add_invoice.html:10
+msgid "Customer"
+msgstr ""
+
+#: .\templates\add_invoice.html:12
+msgid "Select a customer"
+msgstr ""
+
+#: .\templates\add_invoice.html:22
+msgid "The type of invoice"
+msgstr ""
+
+#: .\templates\add_invoice.html:24
+msgid "Select the type of invoice"
+msgstr ""
+
+#: .\templates\add_invoice.html:25
+msgid "RECEIPT"
+msgstr ""
+
+#: .\templates\add_invoice.html:26
+msgid "PROFORMA INVOICE"
+msgstr ""
+
+#: .\templates\add_invoice.html:27
+msgid "INVOICE"
+msgstr ""
+
+#: .\templates\add_invoice.html:35 .\templates\add_invoice.html:36
+#: .\templates\add_invoice.html:90 .\templates\add_invoice.html:91
+msgid "Item name"
+msgstr ""
+
+#: .\templates\add_invoice.html:39 .\templates\add_invoice.html:40
+#: .\templates\add_invoice.html:94 .\templates\add_invoice.html:95
+msgid "Quantity"
+msgstr ""
+
+#: .\templates\add_invoice.html:43 .\templates\add_invoice.html:44
+#: .\templates\add_invoice.html:98 .\templates\add_invoice.html:99
+msgid "Price"
+msgstr ""
+
+#: .\templates\add_invoice.html:47 .\templates\add_invoice.html:48
+#: .\templates\add_invoice.html:56 .\templates\add_invoice.html:102
+#: .\templates\add_invoice.html:103
+msgid "Total"
+msgstr ""
+
+#: .\templates\add_invoice.html:55
+msgid "Grand Total"
+msgstr ""
+
+#: .\templates\add_invoice.html:62 .\templates\add_invoice.html:63
+msgid "Comment"
+msgstr ""
+
+#: .\templates\add_invoice.html:69
+msgid "Paid"
+msgstr ""
+
+#: .\templates\add_invoice.html:75 .\templates\index.html:139
+msgid "Save"
+msgstr ""
+
+#: .\templates\add_invoice.html:80
+msgid "Add a new item line"
+msgstr ""
+
+#: .\templates\add_invoice.html:81
+msgid "Remove last item line"
+msgstr ""
+
+#: .\templates\add_invoice.html:112
+msgid "The last item line has been removed"
+msgstr ""
+
+#: .\templates\add_invoice.html:114
+msgid "There is no item line to remove"
+msgstr ""
+
+#: .\templates\base.html:11 .\templates\base.html:68 .\templates\base.html:88
+msgid "Invoice System"
+msgstr ""
+
+#: .\templates\base.html:16
+msgid "INVOICE SYSTEM"
+msgstr ""
+
+#: .\templates\base.html:17
+msgid "Toggle navigation"
+msgstr ""
+
+#: .\templates\base.html:25
+msgid "Languages"
+msgstr ""
+
+#: .\templates\base.html:34
+msgid "More Options"
+msgstr ""
+
+#: .\templates\base.html:37
+msgid "Add Customer"
+msgstr ""
+
+#: .\templates\base.html:38
+msgid "Add Admin"
+msgstr ""
+
+#: .\templates\base.html:40
+msgid "Statistics"
+msgstr ""
+
+#: .\templates\base.html:53 .\templates\index.html:121
+#: .\templates\index.html:138 .\templates\index.html:153
+#: .\templates\index.html:164
+msgid "Close"
+msgstr ""
+
+#: .\templates\base.html:70
+msgid ""
+"This is a simple invoice management system to help you manage your invoices "
+"efficiently."
+msgstr ""
+
+#: .\templates\base.html:75
+msgid "Contact"
+msgstr ""
+
+#: .\templates\index.html:21
+msgid "Register a new customer"
+msgstr ""
+
+#: .\templates\index.html:30
+msgid "Search..."
+msgstr ""
+
+#: .\templates\index.html:40
+msgid "CUSTOMERS NAME"
+msgstr ""
+
+#: .\templates\index.html:41
+msgid "DATE"
+msgstr ""
+
+#: .\templates\index.html:42
+msgid "TOTAL"
+msgstr ""
+
+#: .\templates\index.html:43
+msgid "PAID"
+msgstr ""
+
+#: .\templates\index.html:44
+msgid "TYPE OF INVOICE"
+msgstr ""
+
+#: .\templates\index.html:45
+msgid "ACTION"
+msgstr ""
+
+#: .\templates\index.html:60
+msgid "True"
+msgstr ""
+
+#: .\templates\index.html:62
+msgid "False"
+msgstr ""
+
+#: .\templates\index.html:68
+msgid "Detail"
+msgstr ""
+
+#: .\templates\index.html:68
+msgid "View"
+msgstr ""
+
+#: .\templates\index.html:72 .\templates\index.html:73
+#: .\templates\index.html:165
+msgid "Delete"
+msgstr ""
+
+#: .\templates\index.html:77 .\templates\index.html:79
+msgid "Modify"
+msgstr ""
+
+#: .\templates\index.html:87
+msgid "Item pagination"
+msgstr ""
+
+#: .\templates\index.html:108
+msgid "No invoice found."
+msgstr ""
+
+#: .\templates\index.html:120
+msgid "Modification"
+msgstr ""
+
+#: .\templates\index.html:130
+msgid "This bill has been paid?"
+msgstr ""
+
+#: .\templates\index.html:133
+msgid "Yes"
+msgstr ""
+
+#: .\templates\index.html:135
+msgid "No"
+msgstr ""
+
+#: .\templates\index.html:152
+msgid "Delete Invoice"
+msgstr ""
+
+#: .\templates\index.html:162
+msgid "Are you sure you want to delete the invoice?"
+msgstr ""
